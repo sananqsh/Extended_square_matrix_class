@@ -15,6 +15,7 @@ class Matrix
 public:
 	Matrix();
 	Matrix(int _row_no, int _col_no, vector< vector<int> >& _elements);
+	Matrix(int _row_no, int _col_no);
 	int get_row_no() { return row_no; }
 	int get_col_no() { return col_no; }
 	void set_element(int i, int j, int x);
@@ -37,6 +38,24 @@ Matrix::Matrix(int _row_no, int _col_no, vector< vector<int> >& _elements)
 	row_no = _row_no;
 	col_no = _col_no;
 	elements = _elements;
+}
+
+Matrix::Matrix(int _row_no, int _col_no)
+{
+	row_no = _row_no;
+	col_no = _col_no;
+
+	// To prevent segmentation fault
+	vector<vector<int> > temp(row_no);
+	elements = temp;
+
+	for (int i = 0; i < row_no; ++i)
+	{
+		for (int i = 0; i < col_no; ++i)
+		{
+			elements[i].push_back(0);
+		}
+	}
 }
 
 void Matrix::set_element(int i, int j, int x) { elements[i][j] = x; }
@@ -103,13 +122,13 @@ int main()
 	cout << "***MATRICES!***\n";
 	int row, col;
 
-	cout << "Size of first matrix1:\n";	cin >> row >> col;
+	cout << "Size of matrix1:\n";	cin >> row >> col;
 	Matrix a = build_matrix(row, col);
 
-	cout << "Size of first matrix2: ";	cin >> row >> col;
+	cout << "Size of matrix2:\n";	cin >> row >> col;
 	Matrix b = build_matrix(row, col);
 
-	Matrix answer = build_matrix(row, col);
+	Matrix answer(row, col);
 
 	answer = a + b;
 	answer.print();
@@ -117,8 +136,8 @@ int main()
 	answer = a - b;
 	answer.print();
 
-	// answer = a * b;
-	// answer.print();
+	answer = a * b;
+	answer.print();
 
 	
 	return 0;
