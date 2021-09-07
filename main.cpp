@@ -87,7 +87,7 @@ void Matrix::set_element(int i, int j, int x) { elements[i][j] = x; }
 	Matrix Matrix::operator*(const Matrix& m) const
 	{
 		// If all Matrix have 2rows and cols
-		Matrix product(row_no, col_no); // By default its elements are all 0 		//TODO: Modify its size!
+		Matrix product(row_no, col_no); // By default its elements are all 0
 		for (int i = 0; i < row_no; ++i)
 			for (int j = 0; j < col_no; ++j)
 				for (int k = 0; k < row_no; ++k)
