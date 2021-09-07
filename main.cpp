@@ -13,7 +13,6 @@ class Matrix
 	int col_no;
 	vector< vector<int> > elements;
 public:
-	Matrix();
 	Matrix(int _row_no, int _col_no);
 	Matrix(int _row_no, int _col_no, vector< vector<int> >& _elements);
 	void set_element(int i, int j, int x);
@@ -24,27 +23,11 @@ public:
 	friend ostream& operator<<(ostream& os, Matrix& m);
 	Matrix transpose();
 
-	//getters:
+	// Getters:
 	int get_row_no() { return row_no; }
 	int get_col_no() { return col_no; }
 	vector< vector<int> > get_elements() {return elements;}
 };
-
-Matrix::Matrix() //default constructor
-{
-	row_no = ROW_NO;
-	col_no = COL_NO;
-	vector<vector<int> > temp(row_no);
-	elements = temp;
-
-	for (int i = 0; i < row_no; ++i)
-	{
-		for (int i = 0; i < col_no; ++i)
-		{
-			elements[i].push_back(0);
-		}
-	}
-}
 
 Matrix::Matrix(int _row_no, int _col_no)
 {
@@ -73,7 +56,7 @@ Matrix::Matrix(int _row_no, int _col_no, vector< vector<int> >& _elements)
 
 void Matrix::set_element(int i, int j, int x) { elements[i][j] = x; }
 
-//TODO: handle size issues with m
+//TODO: Handle size issues with m
 	Matrix Matrix::operator+(const Matrix& m) const
 	{
 		Matrix sum(row_no, col_no);
@@ -90,7 +73,7 @@ void Matrix::set_element(int i, int j, int x) { elements[i][j] = x; }
 
 	Matrix Matrix::operator-(const Matrix& m) const
 	{
-		//TODO: handle size issues with m
+		//TODO: Handle size issues with m
 		Matrix sum(row_no, col_no);
 		for (int i = 0; i < row_no; ++i)
 		{
@@ -104,7 +87,7 @@ void Matrix::set_element(int i, int j, int x) { elements[i][j] = x; }
 	Matrix Matrix::operator*(const Matrix& m) const
 	{
 		// If all Matrix have 2rows and cols
-		Matrix product; // By default its elements are all 0 		//TODO: modify its size!
+		Matrix product(row_no, col_no); // By default its elements are all 0 		//TODO: Modify its size!
 		for (int i = 0; i < row_no; ++i)
 			for (int j = 0; j < col_no; ++j)
 				for (int k = 0; k < row_no; ++k)
@@ -133,13 +116,13 @@ ostream& operator<<(ostream& os, Matrix& m)
 	{
 		for (int j = 0; j < col_no; ++j)
 		{
-			if (elements[i][j] < 10)
+			// For aligning all elements:
+			if (0 <= elements[i][j] && elements[i][j] < 10)
 				os << ' ';
 			os << elements[i][j] << ' ';
 		}
 		os << endl;
 	}
-	// cout << endl;
 	return os;
 }
 
@@ -179,7 +162,6 @@ int main()
 		cout << "Size of matrix2:\n";	
 		cin >> row >> col;
 		Matrix b = build_matrix(row, col);
-		//answer1(row, col), answer2(row, col);//, answer3(row, col);
 
 		Matrix answer1 = a + b;
 		Matrix answer2 = a - b;
