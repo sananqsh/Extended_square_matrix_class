@@ -3,9 +3,12 @@
 
 using namespace std;
 
-//DEFAULT SIZE:
+// DEFAULT SIZE:
 const int ROW_NO = 2;
 const int COL_NO = 2;
+
+// Should the user input an out-of-bound index to access elements of matrices, this exception will be thrown
+class BadRangeInput {};
 
 class Matrix
 {
@@ -24,9 +27,12 @@ public:
 	friend ostream& operator<<(ostream& os, Matrix& m);
 	Matrix transpose();	//operator!() for inverse or transpose
 
-	vector<int> operator[](int i) const;	//returns row
-	//int operator()(int i, j) const; //returns element m[i][j]
-	int operator()(int i, int j) const;
+	vector<int> operator[](int i);	//returns row
+	int operator()(int i, int j); //returns element m[i][j]
+
+	// Checkers:
+	friend bool out_of_bound_row(int r, Matrix* m);
+	friend bool out_of_bound_col(int c, Matrix* m);
 
 	// Getters:
 	int get_row_no() { return row_no; }
@@ -34,18 +40,26 @@ public:
 	vector< vector<int> > get_elements() {return elements;}
 };
 
-int Matrix::operator()(int i, int j) const
+bool out_of_bound_row(int r, Matrix* m) {return (r < 0 || m->elements.size() - 1 < r) ? true : false;}
+bool out_of_bound_col(int c, Matrix* m) {return (c < 0 || m->elements[0].size() - 1 < c) ? true : false;}
+
+int Matrix::operator()(int i, int j)
 {
-	// Exception Handling: if user enters an out-of-bounds area
+	if (out_of_bound_row(i, this) || out_of_bound_col(j, this))
+	{
+		throw BadRangeInput();
+	}
 	return elements[i][j];
 }
 
-vector<int> Matrix::operator[](int i) const
+vector<int> Matrix::operator[](int i)
 {
-	// Exception Handling: if user enters an out-of-bounds area
+	if (out_of_bound_row(i, this))
+	{
+		throw BadRangeInput();
+	}
 	return elements[i];
 }
-
 
 void input_elements(int r, int c, vector< vector<int> >& v);
 Matrix build_matrix(int row_no, int col_no);
@@ -59,43 +73,57 @@ int main()
 	cin >> row >> col;
 	Matrix a = build_matrix(row, col);
 
-	// 	cout << "Size of matrix2:\n";
-	// 	cin >> row >> col;
-	// 	Matrix b = build_matrix(row, col);
-	//
-	// 	Matrix answer1 = a + b;
-	// 	Matrix answer2 = a - b;
-	// 	Matrix answer3 = a * b;
-	//
-	// 	cout << answer1 << endl << answer2 << endl << answer3 << endl;
-	//
-	// 	// Matrix transpose(row, col);
-	// 	Matrix transpose_a = a.transpose();
-	// 	Matrix transpose_b = b.transpose();
-	//
-	// 	cout << transpose_a << endl << transpose_b;
-	//
-	// int multiplier;
-	// cout << "Enter a multiplier: ";
-	// cin >> multiplier;
-	// Matrix product = a * multiplier;
-	// cout << product;
+		cout << "Size of matrix2:\n";
+		cin >> row >> col;
+		Matrix b = build_matrix(row, col);
 
-	// cout << "What row wish you have?\n";
-	// int selected_row;
-	// cin >> selected_row;
-	// vector<int> sel_row = a[selected_row];
-	// cout << "Matrix[" << selected_row << "]: ";
-	// for (size_t i = 0; i < sel_row.size(); i++) {
-	// 	cout << sel_row[i] << ' ';
-	// }
-	// cout << endl;
+		Matrix answer1 = a + b;
+		Matrix answer2 = a - b;
+		Matrix answer3 = a * b;
+
+		cout << answer1 << endl << answer2 << endl << answer3 << endl;
+
+		// Matrix transpose(row, col);
+		Matrix transpose_a = a.transpose();
+		Matrix transpose_b = b.transpose();
+
+		cout << transpose_a << endl << transpose_b;
+
+	int multiplier;
+	cout << "Enter a multiplier: ";
+	cin >> multiplier;
+	Matrix product = a * multiplier;
+	cout << product;
+
+	cout << "What row wish you have?\n";
+	int selected_row;
+	cin >> selected_row;
+	try
+	{
+		vector<int> sel_row = a[selected_row];
+		cout << "Matrix1[" << selected_row << "]: ";
+		for (size_t i = 0; i < sel_row.size(); i++) {
+			cout << sel_row[i] << ' ';
+		}
+		cout << endl;
+	}
+	catch (BadRangeInput b)
+	{
+		cerr << "Only input ranges within the size of your matrix!\n";
+	}
 
 	cout << "Enter the row and then the column of the element you desire: \n";
 	int i, j;
 	cin >> i >> j;
-	cout << "Matrix[" << i << "][" << j << "]: " << a(i, j) << endl;
 
+	try
+	{
+		cout << "Matrix1[" << i << "][" << j << "]: " << a(i, j) << endl;
+	}
+	catch (BadRangeInput b)
+	{
+		cerr << "Only input ranges within the size of your matrix!\n";
+	}
 	return 0;
 }
 
@@ -217,7 +245,14 @@ Matrix::Matrix(int _row_no, int _col_no, vector< vector<int> >& _elements)
 	elements = _elements;
 }
 
-void Matrix::set_element(int i, int j, int x) { elements[i][j] = x; }
+void Matrix::set_element(int i, int j, int x)
+{
+	if (out_of_bound_row(i, this) || out_of_bound_col(j, this))
+	{
+		throw BadRangeInput();
+	}
+	elements[i][j] = x;
+}
 
 Matrix build_matrix(int row_no, int col_no)
 {
