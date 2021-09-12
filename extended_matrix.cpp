@@ -21,7 +21,9 @@ public:
 	Matrix operator*(const Matrix& m2) const;
 	Matrix operator*(int a) const;
 	friend ostream& operator<<(ostream& os, Matrix& m);
-	Matrix transpose();
+	Matrix transpose();	//operator!() for inverse or transpose
+	//vector<int> operator[](int i) const;	//returns row
+	//int operator()(int i, j) const; //returns element m[i][j]
 
 	// Getters:
 	int get_row_no() { return row_no; }
