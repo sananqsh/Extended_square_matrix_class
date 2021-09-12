@@ -7,3 +7,6 @@ A practital class to operate on square matrices.
 - +Has << operator
 - +Has transpose() method
 - -It doesn`t take commands to do operations on matrices, but if you need to do so, go ahead and code it yourself!
+- +For the following methods and also for set_elements method, I did exception-handling:
+- +Has [] and ()(int, int) operators for getting rows and elements
+
