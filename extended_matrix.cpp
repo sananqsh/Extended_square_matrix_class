@@ -36,11 +36,13 @@ public:
 
 int Matrix::operator()(int i, int j) const
 {
+	// Exception Handling: if user enters an out-of-bounds area
 	return elements[i][j];
 }
 
 vector<int> Matrix::operator[](int i) const
 {
+	// Exception Handling: if user enters an out-of-bounds area
 	return elements[i];
 }
 
@@ -80,45 +82,23 @@ int main()
 	// cout << product;
 
 	// cout << "What row wish you have?\n";
-	// int row;
-	// cin >> row;
-	// vector<int> rowx = a[row];
-	// for (size_t i = 0; i < rowx.size(); i++) {
-	// 	cout << rowx[i] << ' ';
+	// int selected_row;
+	// cin >> selected_row;
+	// vector<int> sel_row = a[selected_row];
+	// cout << "Matrix[" << selected_row << "]: ";
+	// for (size_t i = 0; i < sel_row.size(); i++) {
+	// 	cout << sel_row[i] << ' ';
 	// }
 	// cout << endl;
 
 	cout << "Enter the row and then the column of the element you desire: \n";
 	int i, j;
 	cin >> i >> j;
-	cout << a(i, j) << endl;
+	cout << "Matrix[" << i << "][" << j << "]: " << a(i, j) << endl;
 
 	return 0;
 }
 
-Matrix build_matrix(int row_no, int col_no)
-{
-	cout << "Enter the elements of matrix:\n";
-	vector< vector<int> > els(row_no);
-	input_elements(row_no, col_no, els);
-
-	Matrix t(row_no, col_no, els);
-	return t;
-}
-
-void input_elements(int r, int c, vector< vector<int> >& v)
-{
-	int x;
-	for (int i = 0; i < r; ++i)
-	{
-		for (int j = 0; j < c; ++j)
-		{
-			cin >> x;
-			v[i].push_back(x);
-		}
-	}
-	return;
-}
 // Operations
 	// TODO: Handle size issues with m
 	Matrix Matrix::operator+(const Matrix& m) const
@@ -131,7 +111,6 @@ void input_elements(int r, int c, vector< vector<int> >& v)
 				sum.elements[i][j] = elements[i][j] + m.elements[i][j];
 			}
 		}
-
 		return sum;
 	}
 
@@ -239,3 +218,27 @@ Matrix::Matrix(int _row_no, int _col_no, vector< vector<int> >& _elements)
 }
 
 void Matrix::set_element(int i, int j, int x) { elements[i][j] = x; }
+
+Matrix build_matrix(int row_no, int col_no)
+{
+	cout << "Enter the elements of matrix:\n";
+	vector< vector<int> > els(row_no);
+	input_elements(row_no, col_no, els);
+
+	Matrix t(row_no, col_no, els);
+	return t;
+}
+
+void input_elements(int r, int c, vector< vector<int> >& v)
+{
+	int x;
+	for (int i = 0; i < r; ++i)
+	{
+		for (int j = 0; j < c; ++j)
+		{
+			cin >> x;
+			v[i].push_back(x);
+		}
+	}
+	return;
+}
