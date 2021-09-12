@@ -23,6 +23,7 @@ public:
 	friend ostream& operator<<(ostream& os, Matrix& m);
 	Matrix transpose();	//operator!() for inverse or transpose
 	//vector<int> operator[](int i) const;	//returns row
+	vector<int> operator[](int i) const;
 	//int operator()(int i, j) const; //returns element m[i][j]
 
 	// Getters:
@@ -30,6 +31,12 @@ public:
 	int get_col_no() { return col_no; }
 	vector< vector<int> > get_elements() {return elements;}
 };
+
+vector<int> Matrix::operator[](int i) const
+{
+	return elements[i];
+}
+
 
 Matrix::Matrix(int _row_no, int _col_no)
 {
@@ -93,7 +100,7 @@ void Matrix::set_element(int i, int j, int x) { elements[i][j] = x; }
 		for (int i = 0; i < row_no; ++i)
 			for (int j = 0; j < col_no; ++j)
 				for (int k = 0; k < row_no; ++k)
-					product.elements[i][j] += elements[i][k] * m.elements[k][j];				
+					product.elements[i][j] += elements[i][k] * m.elements[k][j];
 
 		return product;
 	}
@@ -152,7 +159,7 @@ Matrix Matrix::transpose()
 void input_elements(int r, int c, vector< vector<int> >& v);
 Matrix build_matrix(int row_no, int col_no);
 
-int main() 
+int main()
 {
 	cout << "***MATRICES!***\n";
 	int row, col;
@@ -161,28 +168,35 @@ int main()
 	cin >> row >> col;
 	Matrix a = build_matrix(row, col);
 	//
-		cout << "Size of matrix2:\n";	
-		cin >> row >> col;
-		Matrix b = build_matrix(row, col);
+	// 	cout << "Size of matrix2:\n";
+	// 	cin >> row >> col;
+	// 	Matrix b = build_matrix(row, col);
+	//
+	// 	Matrix answer1 = a + b;
+	// 	Matrix answer2 = a - b;
+	// 	Matrix answer3 = a * b;
+	//
+	// 	cout << answer1 << endl << answer2 << endl << answer3 << endl;
+	//
+	// 	// Matrix transpose(row, col);
+	// 	Matrix transpose_a = a.transpose();
+	// 	Matrix transpose_b = b.transpose();
+	//
+	// 	cout << transpose_a << endl << transpose_b;
+	//
+	// int multiplier;
+	// cout << "Enter a multiplier: ";
+	// cin >> multiplier;
+	// Matrix product = a * multiplier;
+	// cout << product;
 
-		Matrix answer1 = a + b;
-		Matrix answer2 = a - b;
-		Matrix answer3 = a * b;
-
-		cout << answer1 << endl << answer2 << endl << answer3 << endl;
-
-		// Matrix transpose(row, col);
-		Matrix transpose_a = a.transpose();
-		Matrix transpose_b = b.transpose();
-
-		cout << transpose_a << endl << transpose_b;
-
-	int multiplier;
-	cout << "Enter a multiplier: ";
-	cin >> multiplier;
-	Matrix product = a * multiplier;
-	cout << product;
-
+	cout << "What row wish you have?\n";
+	int i;
+	cin >> i;
+	vector<int> rowx = a[i];
+	for (size_t i = 0; i < rowx.size(); i++) {
+		cout << rowx[i] << endl;
+	}
 	return 0;
 }
 
