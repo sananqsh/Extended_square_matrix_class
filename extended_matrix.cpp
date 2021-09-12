@@ -16,15 +16,17 @@ public:
 	Matrix(int _row_no, int _col_no);
 	Matrix(int _row_no, int _col_no, vector< vector<int> >& _elements);
 	void set_element(int i, int j, int x);
+
 	Matrix operator+(const Matrix& m2) const;
 	Matrix operator-(const Matrix& m2) const;
 	Matrix operator*(const Matrix& m2) const;
 	Matrix operator*(int a) const;
 	friend ostream& operator<<(ostream& os, Matrix& m);
 	Matrix transpose();	//operator!() for inverse or transpose
-	//vector<int> operator[](int i) const;	//returns row
-	vector<int> operator[](int i) const;
+
+	vector<int> operator[](int i) const;	//returns row
 	//int operator()(int i, j) const; //returns element m[i][j]
+	int operator()(int i, int j) const;
 
 	// Getters:
 	int get_row_no() { return row_no; }
@@ -32,40 +34,93 @@ public:
 	vector< vector<int> > get_elements() {return elements;}
 };
 
+int Matrix::operator()(int i, int j) const
+{
+	return elements[i][j];
+}
+
 vector<int> Matrix::operator[](int i) const
 {
 	return elements[i];
 }
 
 
-Matrix::Matrix(int _row_no, int _col_no)
+void input_elements(int r, int c, vector< vector<int> >& v);
+Matrix build_matrix(int row_no, int col_no);
+
+int main()
 {
-	row_no = _row_no;
-	col_no = _col_no;
+	cout << "***MATRICES!***\n";
+	int row, col;
 
-	// To prevent segmentation fault
-	vector<vector<int> > temp(row_no);
-	elements = temp;
+	cout << "Size of matrix1:\n";
+	cin >> row >> col;
+	Matrix a = build_matrix(row, col);
 
-	for (int i = 0; i < row_no; ++i)
+	// 	cout << "Size of matrix2:\n";
+	// 	cin >> row >> col;
+	// 	Matrix b = build_matrix(row, col);
+	//
+	// 	Matrix answer1 = a + b;
+	// 	Matrix answer2 = a - b;
+	// 	Matrix answer3 = a * b;
+	//
+	// 	cout << answer1 << endl << answer2 << endl << answer3 << endl;
+	//
+	// 	// Matrix transpose(row, col);
+	// 	Matrix transpose_a = a.transpose();
+	// 	Matrix transpose_b = b.transpose();
+	//
+	// 	cout << transpose_a << endl << transpose_b;
+	//
+	// int multiplier;
+	// cout << "Enter a multiplier: ";
+	// cin >> multiplier;
+	// Matrix product = a * multiplier;
+	// cout << product;
+
+	// cout << "What row wish you have?\n";
+	// int row;
+	// cin >> row;
+	// vector<int> rowx = a[row];
+	// for (size_t i = 0; i < rowx.size(); i++) {
+	// 	cout << rowx[i] << ' ';
+	// }
+	// cout << endl;
+
+	cout << "Enter the row and then the column of the element you desire: \n";
+	int i, j;
+	cin >> i >> j;
+	cout << a(i, j) << endl;
+
+	return 0;
+}
+
+Matrix build_matrix(int row_no, int col_no)
+{
+	cout << "Enter the elements of matrix:\n";
+	vector< vector<int> > els(row_no);
+	input_elements(row_no, col_no, els);
+
+	Matrix t(row_no, col_no, els);
+	return t;
+}
+
+void input_elements(int r, int c, vector< vector<int> >& v)
+{
+	int x;
+	for (int i = 0; i < r; ++i)
 	{
-		for (int i = 0; i < col_no; ++i)
+		for (int j = 0; j < c; ++j)
 		{
-			elements[i].push_back(0);
+			cin >> x;
+			v[i].push_back(x);
 		}
 	}
+	return;
 }
-
-Matrix::Matrix(int _row_no, int _col_no, vector< vector<int> >& _elements)
-{
-	row_no = _row_no;
-	col_no = _col_no;
-	elements = _elements;
-}
-
-void Matrix::set_element(int i, int j, int x) { elements[i][j] = x; }
-
-//TODO: Handle size issues with m
+// Operations
+	// TODO: Handle size issues with m
 	Matrix Matrix::operator+(const Matrix& m) const
 	{
 		Matrix sum(row_no, col_no);
@@ -156,70 +211,31 @@ Matrix Matrix::transpose()
 	return Matrix(row_no, col_no, transpose_elements);
 }
 
-void input_elements(int r, int c, vector< vector<int> >& v);
-Matrix build_matrix(int row_no, int col_no);
 
-int main()
+// Other methods
+Matrix::Matrix(int _row_no, int _col_no)
 {
-	cout << "***MATRICES!***\n";
-	int row, col;
+	row_no = _row_no;
+	col_no = _col_no;
 
-	cout << "Size of matrix1:\n";
-	cin >> row >> col;
-	Matrix a = build_matrix(row, col);
-	//
-	// 	cout << "Size of matrix2:\n";
-	// 	cin >> row >> col;
-	// 	Matrix b = build_matrix(row, col);
-	//
-	// 	Matrix answer1 = a + b;
-	// 	Matrix answer2 = a - b;
-	// 	Matrix answer3 = a * b;
-	//
-	// 	cout << answer1 << endl << answer2 << endl << answer3 << endl;
-	//
-	// 	// Matrix transpose(row, col);
-	// 	Matrix transpose_a = a.transpose();
-	// 	Matrix transpose_b = b.transpose();
-	//
-	// 	cout << transpose_a << endl << transpose_b;
-	//
-	// int multiplier;
-	// cout << "Enter a multiplier: ";
-	// cin >> multiplier;
-	// Matrix product = a * multiplier;
-	// cout << product;
+	// To prevent segmentation fault
+	vector<vector<int> > temp(row_no);
+	elements = temp;
 
-	cout << "What row wish you have?\n";
-	int i;
-	cin >> i;
-	vector<int> rowx = a[i];
-	for (size_t i = 0; i < rowx.size(); i++) {
-		cout << rowx[i] << endl;
-	}
-	return 0;
-}
-
-Matrix build_matrix(int row_no, int col_no)
-{
-	cout << "Enter the elements of matrix:\n";
-	vector< vector<int> > els(row_no);
-	input_elements(row_no, col_no, els);
-
-	Matrix t(row_no, col_no, els);
-	return t;
-}
-
-void input_elements(int r, int c, vector< vector<int> >& v)
-{
-	int x;
-	for (int i = 0; i < r; ++i)
+	for (int i = 0; i < row_no; ++i)
 	{
-		for (int j = 0; j < c; ++j)
+		for (int i = 0; i < col_no; ++i)
 		{
-			cin >> x;
-			v[i].push_back(x);
+			elements[i].push_back(0);
 		}
 	}
-	return;
 }
+
+Matrix::Matrix(int _row_no, int _col_no, vector< vector<int> >& _elements)
+{
+	row_no = _row_no;
+	col_no = _col_no;
+	elements = _elements;
+}
+
+void Matrix::set_element(int i, int j, int x) { elements[i][j] = x; }
